@@ -1,12 +1,10 @@
 package com.example.taskes;
 
 
-import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.TextField;
@@ -18,10 +16,9 @@ import ai.MultiLayerPerceptron;
 
 import ai.Coup;
 import ai.SigmoidalTransferFunction;
-import javafx.stage.Stage;
 
 
-public class modelController {
+public class ModelController {
 
     @FXML
     TextField erreur;
@@ -30,6 +27,16 @@ public class modelController {
     @FXML
     Button Apprentissage;
 
+    public  double learningRate;
+    public  int size ;
+    public  int  hiddenLayers;
+
+    public void setPar(double learningR,int si,int hid){
+        this.learningRate=learningR;
+        this.size=si;
+        this.hiddenLayers=hid;
+    }
+    LevelController levelController = new LevelController();
     public static HashMap<Integer, Coup> loadCoupsFromFile(String file){
         System.out.println("loadCoupsFromFile from "+file+" ...");
         HashMap<Integer, Coup> map = new HashMap<>();
@@ -92,6 +99,8 @@ public class modelController {
             probar.progressProperty().unbind();
             probar.setProgress(0);
 
+
+
             Task<Double> task = new Task<Double>() {
                 @Override
                 protected Double call() throws Exception {
@@ -106,7 +115,7 @@ public class modelController {
 
                         error += net.backPropagate(c.in, c.out);
 
-                        if ( i % 10000 == 0 && verbose) erreur.setText("Error at step "+i+" is "+ (error/(double)i));
+                        if ( i % 10000 == 0 && verbose) updateMessage("Error at step "+i+" is "+ (error/(double)i));
                         updateProgress(i,epochs);
                     }
                     if ( verbose )
@@ -116,6 +125,12 @@ public class modelController {
 
                 }
             };
+            task.messageProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observableValue, String s, String error) {
+                    erreur.setText(error);
+                }
+            });
 
             probar.progressProperty().bind(task.progressProperty());
 
@@ -137,7 +152,8 @@ public class modelController {
     public void apprends() {
         double epochs = 10000 ;
         HashMap<Integer, Coup> mapTrain = loadCoupsFromFile("train.txt");
-        learne(9,mapTrain,128,0.5,2,true,epochs);
+        System.out.println("rrrrrr : "+size);
+        learne(9,mapTrain,size,learningRate,hiddenLayers,true,epochs);
     }
 
 }

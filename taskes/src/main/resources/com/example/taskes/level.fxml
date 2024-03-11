@@ -11,12 +11,12 @@
                 <Font name="System Bold Italic" size="20.0" />
             </font>
         </Button>
-        <Button fx:id="difficile" layoutX="165.0" layoutY="289.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="283.0" text="DIFFICILE">
+        <Button fx:id="difficile" layoutX="165.0" layoutY="289.0" mnemonicParsing="false" onAction="#dificileClick" prefHeight="38.0" prefWidth="283.0" text="DIFFICILE">
             <font>
                 <Font name="System Bold Italic" size="20.0" />
             </font>
         </Button>
-        <Button fx:id="moyen" layoutX="165.0" layoutY="176.0" mnemonicParsing="false" prefHeight="38.0" prefWidth="283.0" text="MOYEN">
+        <Button fx:id="moyen" layoutX="165.0" layoutY="176.0" mnemonicParsing="false" onAction="#moyenClick" prefHeight="38.0" prefWidth="283.0" text="MOYEN">
             <font>
                 <Font name="System Bold Italic" size="20.0" />
             </font>
